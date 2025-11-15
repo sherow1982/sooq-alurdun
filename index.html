@@ -68,24 +68,17 @@
 
                     
 
-    <script>
+        <script>
     (function() {
         try {
-            // قراءة من products.json مباشرة
             fetch('products.json')
-                .then(response => {
-                    if (!response.ok) throw new Error('فشل تحميل products.json');
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(products => {
                     const container = document.getElementById('products-container');
-                    if (!container) {
-                        console.error('عنصر البطاقات غير موجود');
-                        return;
-                    }
+                    if (!container) return;
                     
                     if (!Array.isArray(products) || products.length === 0) {
-                        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">لم يتم العثور على منتجات</p>';
+                        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">لا توجد منتجات</p>';
                         return;
                     }
                     
@@ -97,10 +90,20 @@
                             const title = product.title || 'منتج';
                             const description = product.description || 'منتج أصلي';
                             const salePrice = product.sale_price || '0';
-                            const imageLink = product.image_link || 'https://via.placeholder.com/300x300/667eea/ffffff';
+                            const originalPrice = product.price || '0';
+                            const imageLink = product.image_link || 'https://via.placeholder.com/300';
                             const productLink = `products/${productId}.html`;
                             
-                            console.log(`Product ${index}: ID=${productId}, Title=${title}, Price=${salePrice}, Link=${productLink}`);
+                            // عرض السعرين مع strikethrough
+                            let pricesHTML = `<div class="product-price">${salePrice} د.ا</div>`;
+                            if (originalPrice !== salePrice && originalPrice) {
+                                pricesHTML = `
+                                    <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                                        <span style="color: #e74c3c; font-size: 1.3em; font-weight: bold;">${salePrice} د.ا</span>
+                                        <span style="color: #bdc3c7; text-decoration: line-through; font-size: 1em;">${originalPrice} د.ا</span>
+                                    </div>
+                                `;
+                            }
                             
                             const cardHTML = `
                                 <div class="product-card" data-product-id="${productId}">
@@ -111,28 +114,27 @@
                                     <div class="product-info">
                                         <h3>${title}</h3>
                                         <p>${description.substring(0, 50)}...</p>
-                                        <div class="product-price">${salePrice} د.ا</div>
-                                        <button class="btn" onclick="window.location.href='${productLink}';" style="cursor: pointer;">عرض التفاصيل</button>
+                                        ${pricesHTML}
+                                        <button class="btn" onclick="window.location.href='${productLink}';" style="cursor: pointer; margin-top: 10px;">عرض التفاصيل</button>
                                     </div>
                                 </div>
                             `;
                             container.innerHTML += cardHTML;
                         } catch(err) {
-                            console.error('خطأ في المنتج رقم ' + index, err, product);
+                            console.error('خطأ في المنتج:', err);
                         }
                     });
                 })
                 .catch(error => {
-                    console.error('خطأ في تحميل البيانات:', error);
-                    document.getElementById('products-container').innerHTML = '<p style="color: red; grid-column: 1/-1; text-align: center;">خطأ: ' + error.message + '</p>';
+                    console.error('خطأ:', error);
+                    document.getElementById('products-container').innerHTML = '<p style="color: red;">خطأ في تحميل المنتجات</p>';
                 });
-        } catch(e) {
-            console.error('خطأ في السكريبت:', e);
-        }
+        } catch(e) {}
     })();
     </script>
 </body>
 </html>
+
 
 
 
