@@ -3,19 +3,5 @@
 <channel>
 <title>سوق الأردن</title>
 <link>https://sooq-jordan.arabsad.com</link>
-<description>أفضل المنتجات بأسعار تنافسية في الأردن</description>
-<!-- تم إنشاء منتجات محسّنة مع حقول الأسعار الصحيحة -->
-<item>
-<g:id>74</g:id>
-<g:title><![CDATA[جهاز ازالة الشعر بالليزر]]></g:title>
-<g:description><![CDATA[جهاز متقدم لإزالة الشعر بتقنية الليزر الآمنة والفعّالة على جميع أنواع البشرة]]></g:description>
-<g:link>https://sooq-jordan.arabsad.com/products/جهاز-ازالة-الشعر-بالليزر.html</g:link>
-<g:image_link>https://firebasestorage.googleapis.com/v0/b/ashyaatcrm.appspot.com/o/images%2FashyaatLeFyBCeG.jpg</g:image_link>
-<g:availability>in stock</g:availability>
-<g:price>150 JOD</g:price>
-<g:sale_price>121 JOD</g:sale_price>
-<g:brand>سوق الأردن</g:brand>
-<g:condition>new</g:condition>
-</item>
-</channel>
+<description>أفضل المنتجات بأسعار تنافسية في الأردن</description></channel>
 </rss>
