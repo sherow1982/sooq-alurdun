@@ -340,3 +340,4 @@ console.log('   ✅ عناوين H1, H2, H3 منظمة');
 console.log('   ✅ Loading lazy للصور');
 console.log('   ✅ روابط نظيفة وواضحة');
 
+

@@ -140,3 +140,4 @@ console.log('   • عدد المنتجات: ' + products.length);
 console.log('   • عدد URLs في Sitemap: ' + (products.length + 2));
 console.log('   • حجم Google Feed: ~' + Math.round(merchantFeed.length / 1024) + ' KB');
 
+
