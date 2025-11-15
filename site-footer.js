@@ -1,11 +1,22 @@
-document.write(`
-    <footer style="background:#222; color:#fff; padding:20px 0; text-align:center; direction:rtl;">
-        <div style="margin-bottom:10px;font-size:1.2em;"><a href="about-us.html">من نحن</a> |
-<a href="terms-of-service.html">شروط الخدمة</a> |
-<a href="privacy-policy.html">سياسة الخصوصية</a> |
-<a href="shipping-policy.html">سياسة الشحن</a> |
-<a href="return-refund-policy.html">الاسترجاع والإسترداد</a> |
-<a href="contact-us.html">اتصل بنا</a></div>
-        <div style="font-size:.95em; color:#bbb">جميع الحقوق محفوظة &copy; 2025 سوق الأردن</div>
-    </footer>
-`);
+document.addEventListener("DOMContentLoaded", function() {
+    // تحديد المسار الأساسي
+    const basePath = window.location.pathname.includes('/products/') ? '../' : '';
+    
+    const footerHTML = `
+    <footer style="background:#222; color:#fff; padding:30px 0; text-align:center; direction:rtl; margin-top:50px;">
+        <div style="margin-bottom:20px; font-size:1em;">
+            <a href="${basePath}about-us.html" style="color:#fff; text-decoration:none; margin:0 10px;">من نحن</a> |
+            <a href="${basePath}terms-of-service.html" style="color:#fff; text-decoration:none; margin:0 10px;">الشروط</a> |
+            <a href="${basePath}privacy-policy.html" style="color:#fff; text-decoration:none; margin:0 10px;">الخصوصية</a> |
+            <a href="${basePath}shipping-policy.html" style="color:#fff; text-decoration:none; margin:0 10px;">الشحن</a> |
+            <a href="${basePath}return-refund-policy.html" style="color:#fff; text-decoration:none; margin:0 10px;">الاسترجاع</a> |
+            <a href="${basePath}contact-us.html" style="color:#fff; text-decoration:none; margin:0 10px;">اتصل بنا</a>
+        </div>
+        <div style="font-size:.9em; color:#bbb; border-top:1px solid #444; padding-top:15px;">
+            <p>جميع الحقوق محفوظة &copy; 2025 سوق الأردن</p>
+            <p style="font-size:0.85em; margin-top:5px;">البريد: <a href="mailto:sooqjordan750@gmail.com" style="color:#667eea;">sooqjordan750@gmail.com</a></p>
+        </div>
+    </footer>`;
+    
+    document.body.insertAdjacentHTML('beforeend', footerHTML);
+});
