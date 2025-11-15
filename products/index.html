@@ -47,66 +47,60 @@
                     
 
         <script>
-    (function() {
-        try {
-            fetch('../products.json')
-                .then(response => response.json())
-                .then(products => {
-                    const container = document.getElementById('products-container');
-                    if (!container) return;
-                    
-                    if (!Array.isArray(products) || products.length === 0) {
-                        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">لا توجد منتجات</p>';
-                        return;
-                    }
-                    
-                    container.innerHTML = '';
-                    
-                    products.forEach((product, index) => {
-                        try {
-                            const productId = String(product.id).trim();
-                            const title = product.title || 'منتج';
-                            const description = product.description || 'منتج أصلي';
-                            const salePrice = product.sale_price || '0';
-                            const originalPrice = product.price || '0';
-                            const imageLink = product.image_link || 'https://via.placeholder.com/300';
-                            const productLink = `./${productId}.html`;
-                            
-                            // عرض السعرين مع strikethrough
-                            let pricesHTML = `<div class="product-price">${salePrice} د.ا</div>`;
-                            if (originalPrice !== salePrice && originalPrice) {
-                                pricesHTML = `
-                                    <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
-                                        <span style="color: #e74c3c; font-size: 1.3em; font-weight: bold;">${salePrice} د.ا</span>
-                                        <span style="color: #bdc3c7; text-decoration: line-through; font-size: 1em;">${originalPrice} د.ا</span>
-                                    </div>
-                                `;
-                            }
-                            
-                            const cardHTML = `
-                                <div class="product-card" data-product-id="${productId}">
-                                    <img src="${imageLink}" 
-                                         alt="${title}" 
-                                         class="product-image"
-                                         onerror="this.src='https://via.placeholder.com/300x300/667eea/ffffff'">
-                                    <div class="product-info">
-                                        <h3>${title}</h3>
-                                        <p>${description.substring(0, 50)}...</p>
-                                        ${pricesHTML}
-                                        <button class="btn" onclick="window.location.href='${productLink}';" style="cursor: pointer; margin-top: 10px;">عرض التفاصيل</button>
-                                    </div>
+(function() {
+    try {
+        fetch('../products.json')
+            .then(response => response.json())
+            .then(products => {
+                const container = document.getElementById('products-container');
+                if (!container) return;
+                if (!Array.isArray(products) || products.length === 0) {
+                    container.innerHTML = '<p style=\"grid-column: 1/-1; text-align: center;\">لا توجد منتجات</p>';
+                    return;
+                }
+                container.innerHTML = '';
+                products.forEach(product => {
+                    try {
+                        const title = product.title || 'منتج';
+                        const description = product.description || 'منتج أصلي';
+                        const salePrice = product.sale_price || '0';
+                        const originalPrice = product.price || '0';
+                        const imageLink = product.image_link || 'https://via.placeholder.com/300';
+                        const slug = product.slug || '';
+                        const productLink = https://sooq-jordan.arabsad.com/products/جهاز-تنظيف-الأذن.html;
+                        let pricesHTML = <div class=\"product-price\"> د.ا</div>;
+                        if (originalPrice !== salePrice && originalPrice) {
+                            pricesHTML = 
+                                <div style=\"display: flex; gap: 10px; align-items: center; justify-content: center;\">
+                                    <span style=\"color: #e74c3c; font-size: 1.3em; font-weight: bold;\"> د.ا</span>
+                                    <span style=\"color: #bdc3c7; text-decoration: line-through; font-size: 1em;\"> د.ا</span>
                                 </div>
-                            `;
-                            container.innerHTML += cardHTML;
-                        } catch(err) {
-                            console.error('خطأ:', err);
+                            ;
                         }
-                    });
-                })
-                .catch(error => console.error('خطأ:', error));
-        } catch(e) {}
-    })();
-    </script>
+                        const cardHTML = 
+                            <div class=\"product-card\" onclick=\"window.open('','_blank');\" style=\"cursor: pointer;\">
+                                <img src=\"https://firebasestorage.googleapis.com/v0/b/ashyaatcrm.appspot.com/o/images%2Fashyaat5XTtx6oX.jpg?alt=media&token=d1ef1624-d928-4095-8109-3220950eac36\" 
+                                     alt=\"جهاز تنظيف الأذن\" 
+                                     class=\"product-image\"
+                                     onerror=\"this.src='https://via.placeholder.com/300x300/667eea/ffffff'\">
+                                <div class=\"product-info\">
+                                    <h3>جهاز تنظيف الأذن</h3>
+                                    <p>...</p>
+                                    
+                                    <button class=\"btn\" style=\"margin-top: 10px; pointer-events: none;\">عرض التفاصيل</button>
+                                </div>
+                            </div>
+                        ;
+                        container.innerHTML += cardHTML;
+                    } catch(err) {
+                        console.error('خطأ بناء بطاقة المنتج:', err);
+                    }
+                });
+            })
+            .catch(error => console.error('خطأ:', error));
+    } catch(e) {}
+})();
+</script>
 </body>
 </html>
 
