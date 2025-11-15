@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كتالوج المنتجات - سوق الأردن</title>
+    <meta name="description" content="تصفح جميع منتجات سوق الأردن الأصلية بأسعار تنافسية">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 0; margin-bottom: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; margin: 30px 0; }
+        .product-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .product-image { width: 100%; height: 250px; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); display: flex; align-items: center; justify-content: center; font-size: 3em; }
+        .product-info { padding: 20px; }
+        .product-info h3 { color: #667eea; margin-bottom: 10px; font-size: 1.1em; }
+        .product-info p { color: #7f8c8d; font-size: 0.95em; margin-bottom: 15px; }
+        .product-price { font-size: 1.3em; color: #e74c3c; font-weight: bold; margin-bottom: 10px; }
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; transition: opacity 0.3s; }
+        .btn:hover { opacity: 0.9; }
+        .breadcrumb { background: white; padding: 15px 20px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .breadcrumb a { color: #667eea; text-decoration: none; font-weight: 600; }
+        footer { text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #e0e0e0; color: #7f8c8d; font-size: 0.95em; }
+    </style>
+</head>
+<body>
+    <script src="../site-header.js"></script>
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../index.html">الرئيسية</a> / كتالوج المنتجات
+        </div>
+
+        <header>
+            <h1>📦 كتالوج المنتجات</h1>
+            <p>تصفح جميع منتجاتنا الأصلية بأفضل الأسعار</p>
+        </header>
+
+        <div id="products-container" class="products-grid">
+            <!-- سيتم ملؤها من JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 سوق الأردن. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="../site-footer.js"></script>
+    
+    <script>
+        // تحميل المنتجات من JSON
+        fetch('../product-feed.json')
+            .then(response => response.json())
+            .then(products => {
+                const container = document.getElementById('products-container');
+                
+                products.forEach(product => {
+                    const productHTML = `
+                        <div class="product-card">
+                            <div class="product-image" style="background-image: url('${product.image}'); background-size: cover; background-position: center;">
+                                ${!product.image ? '📦' : ''}
+                            </div>
+                            <div class="product-info">
+                                <h3>${product.name}</h3>
+                                <p>${product.description.substring(0, 50)}...</p>
+                                <div class="product-price">${product.price} د.ا</div>
+                                <a href="../products/${product.id}.html" class="btn">عرض التفاصيل</a>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += productHTML;
+                });
+            })
+            .catch(error => {
+                console.error('خطأ في تحميل المنتجات:', error);
+                document.getElementById('products-container').innerHTML = '<p>عذراً، حدث خطأ في تحميل المنتجات</p>';
+            });
+    </script>
+</body>
+</html>

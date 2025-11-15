@@ -2,11 +2,13 @@
     RewriteEngine On
     RewriteBase /
     
-    # حيادة /products/ إلى الرئيسية
-    RewriteRule ^products/?$ / [R=301,L]
-    
     # حيادة google-merchant-feed.xml إلى الرئيسية
     RewriteRule ^google-merchant-feed\.xml$ / [R=301,L]
+    
+    # السماح بمجلد products - لا تحيد
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^products/index\.html$ - [L]
     
     # حيادة HTML - إزالة الـ .html
     RewriteCond %{REQUEST_FILENAME} !-f
