@@ -68,7 +68,7 @@
 
                     
 
-        <script>
+            <script>
     (function() {
         try {
             fetch('products.json')
@@ -84,45 +84,40 @@
                     
                     container.innerHTML = '';
                     
-                    products.forEach((product, index) => {
-                        try {
-                            const productId = String(product.id).trim();
-                            const title = product.title || 'منتج';
-                            const description = product.description || 'منتج أصلي';
-                            const salePrice = product.sale_price || '0';
-                            const originalPrice = product.price || '0';
-                            const imageLink = product.image_link || 'https://via.placeholder.com/300';
-                            const productLink = `https://sherow1982.github.io/sooq-Jordan/products/${product.slug}.html`;
-                            
-                            // عرض السعرين مع strikethrough
-                            let pricesHTML = `<div class="product-price">${salePrice} د.ا</div>`;
-                            if (originalPrice !== salePrice && originalPrice) {
-                                pricesHTML = `
-                                    <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
-                                        <span style="color: #e74c3c; font-size: 1.3em; font-weight: bold;">${salePrice} د.ا</span>
-                                        <span style="color: #bdc3c7; text-decoration: line-through; font-size: 1em;">${originalPrice} د.ا</span>
-                                    </div>
-                                `;
-                            }
-                            
-                            const cardHTML = `
-                                <div class="product-card" data-product-id="${productId}">
-                                    <img src="${imageLink}" 
-                                         alt="${title}" 
-                                         class="product-image"
-                                         onerror="this.src='https://via.placeholder.com/300x300/667eea/ffffff'">
-                                    <div class="product-info">
-                                        <h3>${title}</h3>
-                                        <p>${description.substring(0, 50)}...</p>
-                                        ${pricesHTML}
-                                        <button class="btn" onclick="window.open('\','_blank');" style="cursor: pointer; margin-top: 10px;">عرض التفاصيل</button>
-                                    </div>
+                    products.forEach((product) => {
+                        const title = product.title || 'منتج';
+                        const description = product.description || 'منتج أصلي';
+                        const salePrice = product.sale_price || '0';
+                        const originalPrice = product.price || '0';
+                        const imageLink = product.image_link || 'https://via.placeholder.com/300';
+                        const slug = product.slug || '';
+                        const productUrl = `https://sherow1982.github.io/sooq-Jordan/products/${slug}.html`;
+                        
+                        let pricesHTML = `<div class="product-price">${salePrice} د.ا</div>`;
+                        if (originalPrice !== salePrice && originalPrice) {
+                            pricesHTML = `
+                                <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                                    <span style="color: #e74c3c; font-size: 1.3em; font-weight: bold;">${salePrice} د.ا</span>
+                                    <span style="color: #bdc3c7; text-decoration: line-through; font-size: 1em;">${originalPrice} د.ا</span>
                                 </div>
                             `;
-                            container.innerHTML += cardHTML;
-                        } catch(err) {
-                            console.error('خطأ في المنتج:', err);
                         }
+                        
+                        const cardHTML = `
+                            <div class="product-card" onclick="window.open('${productUrl}','_blank');" style="cursor: pointer;">
+                                <img src="${imageLink}" 
+                                     alt="${title}" 
+                                     class="product-image"
+                                     onerror="this.src='https://via.placeholder.com/300x300/667eea/ffffff'">
+                                <div class="product-info">
+                                    <h3>${title}</h3>
+                                    <p>${description.substring(0, 50)}...</p>
+                                    ${pricesHTML}
+                                    <button class="btn" style="margin-top: 10px; pointer-events: none;">عرض التفاصيل</button>
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += cardHTML;
                     });
                 })
                 .catch(error => {
