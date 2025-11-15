@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سوق الأردن | توجيه صامت</title>
+    <meta name="robots" content="noindex">
+    <style>
+        :root {
+            --jordan-green: #007A3D;
+            --jordan-red: #CE1126;
+            --jordan-white: #FFFFFF;
+            --jordan-gold: #FFD700;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: transparent;
+            color: transparent;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+        .hidden-redirect {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            left: -9999px;
+        }
+        .debug-info {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, var(--jordan-green) 0%, var(--jordan-red) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 9999;
+        }
+        .debug-info.show {
+            display: block;
+        }
+    </style>
+    <link href="css/mobile-fix.css" rel="stylesheet">
+</head>
+<body>
+    <div class="hidden-redirect">
+        <h1>سوق الأردن - توجيه صامت</h1>
+        <p>جاري التوجيه...</p>
+    </div>
+    <div class="debug-info" id="debug-info">
+        <h2>🔧 وضع Debug - نظام التوجيه الصامت</h2>
+        <p id="debug-details"></p>
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+            <a href="./" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none;">🏠 رئيسي</a>
+            <a href="./amp/" style="background: rgba(255,255,255,0.2); color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none;">📱 AMP</a>
+        </div>
+    </div>
+    <script>
+        (function() {
+            'use strict';
+            const currentPath = window.location.pathname;
+            const currentURL = window.location.href;
+            const searchParams = new URLSearchParams(window.location.search);
+            const debugMode = searchParams.get('debug') === '1';
+            if (debugMode) {
+                document.body.style.opacity = '1';
+                document.getElementById('debug-info').classList.add('show');
+                console.log('🔄 صفحة 404 في وضع Debug | المسار:', currentPath);
+            }
+            function isMobileDevice() {
+                const mobileRegex = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i;
+                const userAgent = navigator.userAgent;
+                const screenWidth = window.screen.width || window.innerWidth;
+                const isSmallScreen = screenWidth < 768;
+                const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(userAgent);
+                const isMobileUA = mobileRegex.test(userAgent);
+                const isTouchDevice = 'ontouchstart' in window;
+                const isMobile = (isMobileUA && isSmallScreen && !isTablet) || (isTouchDevice && isSmallScreen && !isTablet);
+                if (debugMode) {
+                    const debugInfo = {
+                        userAgent: userAgent.substring(0, 60) + '...',
+                        screenWidth: screenWidth,
+                        isMobileUA: isMobileUA,
+                        isSmallScreen: isSmallScreen,
+                        isTablet: isTablet,
+                        isTouchDevice: isTouchDevice,
+                        decision: isMobile ? 'جوال → AMP' : 'كمبيوتر → عادي',
+                        currentPath: currentPath,
+                        currentURL: currentURL
+                    };
+                    console.table(debugInfo);
+                    const debugEl = document.getElementById('debug-details');
+                    if (debugEl) {
+                        debugEl.innerHTML = `
+                            Path: <code>${currentPath}</code><br>
+                            Device: <strong>${isMobile ? 'Mobile 📱' : 'Desktop 🖥️'}</strong><br>
+                            Screen: ${screenWidth}px<br>
+                            Target: ${isMobile ? '/amp/' : '/'}<br>
+                            <small style="opacity:0.8">UA: ${userAgent.substring(0, 40)}...</small>
+                        `;
+                    }
+                }
+                return isMobile;
+            }
+            function performInstantRedirect() {
+                try {
+                    const isMobile = isMobileDevice();
+                    const pathParts = currentPath.split('/');
+                    const repoName = pathParts[1] || 'sooq-Jordan';
+                    const basePath = '/' + repoName + '/';
+                    let targetPath;
+                    if (isMobile) {
+                        if (currentPath.includes('/amp/')) {
+                            targetPath = currentPath;
+                        } else if (currentPath.includes('/products')) {
+                            targetPath = basePath + 'amp/products.html';
+                        } else if (currentPath.includes('/cart')) {
+                            targetPath = basePath + 'amp/cart.html';
+                        } else if (currentPath.includes('/checkout')) {
+                            targetPath = basePath + 'amp/checkout.html';
+                        } else {
+                            targetPath = basePath + 'amp/';
+                        }
+                    } else {
+                        targetPath = basePath;
+                    }
+                    if (debugMode) {
+                        console.log('🎯 معلومات التوجيه الصامت:', {
+                            currentPath: currentPath,
+                            repoName: repoName,
+                            basePath: basePath,
+                            targetPath: targetPath,
+                            deviceType: isMobile ? 'موبايل' : 'كمبيوتر'
+                        });
+                        setTimeout(() => {
+                            console.log('🚀 Debug: سيتم التوجيه بعد 3 ثوانٍ إلى:', targetPath);
+                            window.location.replace(targetPath);
+                        }, 3000);
+                        return;
+                    }
+                    window.location.replace(targetPath);
+                } catch (error) {
+                    if (debugMode) {
+                        console.error('❌ خطأ في التوجيه:', error);
+                    }
+                    window.location.replace(window.location.origin + '/sooq-Jordan/');
+                }
+            }
+            performInstantRedirect();
+        })();
+    </script>
+</body>
+</html>
